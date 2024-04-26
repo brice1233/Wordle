@@ -2,145 +2,168 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Wordle</title>
+    <title>guess the word</title>
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
     <div class="content">
         <table>
-        <tbody id="board">
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        </tbody>
+            <tbody id="board">
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            </tbody>
         </table>
-     <div class="input-container">
-        <input type="text" maxlength="5" minlength="5">
-        <button>Enter</button>
+        <div class="input-container">
+
+            <label>
+                <input type="text" maxlength="5" minlength="5">
+            </label>
+
+            <button>Enter!</button>
+        </div>
         <p id="game-over"></p>
-     </div>
     </div>
 </div>
-
+</body>
 <script>
-    const answer = "crane"; //todo make this random word
-    const  board = document.getElementById('board');
-    const textBox = document.querySelector('input');
+    const answer = "HOUSE";
+    const answer2 ="SOCKS";
+    const board = document.getElementById('board');
+    const textbox = document.querySelector('input');
     const submitButton = document.querySelector('button');
     const gameOverMessage = document.getElementById('game-over');
 
     let currentGuessNumber = 0
+    let currentGuessNumber2 = 0
 
-    submitButton.addEventListener('click',function (e){
-        let guess = textBox.value;
-        if(guess.length !== 5){
+    submitButton.addEventListener('click', function(e){
+        let guess = textbox.value;
+        if (guess.length !== 5){
             return //don't accept words that aren't 5 letters long
         }
-        //todo clear the textBox once you hit submit
 
         //render guess to the board
-        writeGuess(guess) //todo create this function
+        writeGuess(guess)
 
         currentGuessNumber++
 
-        //todo check for win
-
-        //todo check for loss
-
         //check for win
-        if(guess.toUpperCase() === answer.toUpperCase()){
-            gameOverMessage.textContent = 'you won yippie';
+        if (guess.toUpperCase() === answer.toUpperCase()){
+            gameOverMessage.textContent = 'You Won yippie!!!';
             submitButton.remove();
-            textBox.remove()
-            return;
-            //check for loss
-            if(currentGuessNumber >= board.children.length){
-                gameOverMessage.textContent = `you lost booo :(the word was ${answer}.`;
-                submitButton.remove();
-                textBox.remove();
-                return
-            }
+            textbox.remove();
+            return
         }
-        function writeGuess(guess){
-            //build our match array so we easily see what matches
-            let matchArray = buildMatchArray(guess) //todo create function that turns words into arrays
 
-            //identify the current tr tag
-            let currentGuessRow = board.children[currentGuessNumber];
-            //identify the columns for each in that row
-            let columns=currentGuessNumber.children
+        //check for loss
+        if (currentGuessNumber >= board.children.length) {
+            gameOverMessage.textContent = `You lost :( The word was ${answer}.`;
+            submitButton.remove();
+            textbox.remove();
 
-            for(let i = 0; i<matchArray.length; i++){
-                //todo check each letter for green/yellow/grey backgrounds
-            }
         }
-        for(let i = 0; i<matchArray.length; i ++){
+
+
+    });
+
+    function writeGuess(guess){
+        //build our match array se we easily see what matches
+        let matchArray = buildingMatchArray(guess) //todo create function that turns words into arrays
+
+        //identify the current TR tag
+        let currentGuessRow = board.children[currentGuessNumber];
+        //identify the columns for each letter in that row
+        let columns = currentGuessRow.children
+
+        for (let i = 0; i<matchArray.length; i++){
             let column = columns[i];
             column.textContent = guess[i].toUpperCase();
 
-            if(matchArray[i] === 2){ //perfct match
-                coulumn.classList.add('correct')
-            }else if (matchArray[i] === 1){ //in word,wrong spot
+            if (matchArray[i] === 2){ //perfect match
+                column.classList.add('correct');
+            } else if (matchArray[i] === 1){ //in word, wrong spot
                 column.classList.add('in-word');
-            }else{
+            } else {
                 column.classList.add('incorrect'); //no match
             }
         }
-        function buildMatchArray(guess){
-            guess = guess.toUpperCase();
-            let answerKey = [];
-            let matchAsArray = [0,0,0,0,0]; //assume no match to start
-            for(let i = 0; i < answer.length; i ++){
-                let letter= answer[i].toUpperCase();
-                answerAsArray.push(letter);
-            }//todo find exactly matches first
+    }
 
-            //todo find in-word matches and misses
+    function buildingMatchArray(guess){
+        guess = guess.toUpperCase();
+        let answerAsArray = [];
+        let matchArray = [0, 0, 0, 0, 0,]; //assume no match to start
+        for (let i = 0; i < answer.length; i++){
+            let letter = answer[i].toUpperCase();
+            answerAsArray.push(letter);
         }
         //find exact matches
-        for(let i = 0; i < guess.length; i++){
+        for (let i = 0; i < guess.length; i++){
             let letter = guess[i];
-            if(letter === answer[i]){
-                answerAsArray[i] = null //remove letter to prevent matching it as yellow, too
+            if (letter === answer[i]){
+                answerAsArray[i] = null; //remove letter to prevent matching it as yellow, too
                 matchArray[i] = 2; //indicate we found a match
             }
         }
-        //find in-word
-    })
 
+        //find in-word matches and misses
+        for (let i = 0; i < guess.length; i++){
+            let letter = guess[i];
+            let index = answerAsArray.indexOf(letter);
+
+            //if letter not in remaining letters, move on to next letter
+            if (index === -1){
+                continue
+            }
+
+            //remove letter to prevent matching in other positions
+            answerAsArray[index] = null;
+            //mark it yellow as it is in the word but not in the correct spot
+            matchArray[i] = 1
+        }
+        return matchArray
+    }
 </script>
 </body>
 </html>
