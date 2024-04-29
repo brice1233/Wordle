@@ -67,15 +67,22 @@
 </div>
 </body>
 <script>
-    const answer = "HOUSE";
-    const answer2 ="SOCKS";
+    let answer = "";
+    const wordList = ['HOUSE', 'SOCKS', 'RAISE', 'BOARD', 'INPUT','DOGGY']
     const board = document.getElementById('board');
     const textbox = document.querySelector('input');
     const submitButton = document.querySelector('button');
     const gameOverMessage = document.getElementById('game-over');
 
     let currentGuessNumber = 0
-    let currentGuessNumber2 = 0
+
+
+    function getRandomAnswer(){
+        answer = wordList[Math.floor(Math.random()*wordList.length)];  //JS
+        // String answer = wordList[(int)(Math.random()*wordList.length)]  //Java
+    }
+
+    getRandomAnswer()
 
     submitButton.addEventListener('click', function(e){
         let guess = textbox.value;
@@ -104,7 +111,6 @@
 
         }
 
-
     });
 
     function writeGuess(guess){
@@ -129,6 +135,7 @@
             }
         }
     }
+
 
     function buildingMatchArray(guess){
         guess = guess.toUpperCase();
