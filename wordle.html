@@ -63,18 +63,22 @@
             <button>Enter!</button>
         </div>
         <p id="game-over"></p>
+
     </div>
 </div>
 </body>
 <script>
     let answer = "";
-    const wordList = ['HOUSE', 'SOCKS', 'RAISE', 'BOARD', 'INPUT','DOGGY']
+    const wordList = ['HOUSE', 'SOCKS', 'RAISE', 'BOARD', 'INPUT','DOGGY','WOLFS','FARTS']
     const board = document.getElementById('board');
     const textbox = document.querySelector('input');
     const submitButton = document.querySelector('button');
     const gameOverMessage = document.getElementById('game-over');
 
     let currentGuessNumber = 0
+
+    const gameOverBox = document.getElementById("game-over");
+
 
 
     function getRandomAnswer(){
