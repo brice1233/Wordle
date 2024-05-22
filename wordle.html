@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>guess the word</title>
+    <title>Title</title>
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
@@ -55,89 +55,58 @@
             </tbody>
         </table>
         <div class="input-container">
-
-            <label>
-                <input type="text" maxlength="5" minlength="5">
-            </label>
-
-            <button>Enter</button>
+            <input type="text" maxlength="5" minlength="5">
+            <button id="button">Enter!</button>
+            <button id="restartButton">Restart</button>
         </div>
         <p id="game-over"></p>
-
-
-
-        <form id="result">
-            <button ="reset" onclick="clear1()">reset</form>
-        <script>
-            function clear1(){
-                document.getElementById("result").reset();}</script>
-
-
     </div>
 </div>
 </body>
 <script>
-    let answer = "";
-    const wordList = ['HOUSE', 'SOCKS', 'RAISE', 'BOARD', 'INPUT','DOGGY','WOLFS','FARTS']
+    const wordList = ['CRANE','WOLF','FARTS','HOUSE','RAISE','INPUT','BOARD','SOCKS'];
+    let answer = wordList[Math.floor(Math.random() * wordList.length)];
     const board = document.getElementById('board');
-    const textbox = document.querySelector('input');
+    const textBox = document.querySelector('input');
     const submitButton = document.querySelector('button');
     const gameOverMessage = document.getElementById('game-over');
+    const restartButton = document.getElementById('restartButton');
 
     let currentGuessNumber = 0
 
-    const gameOverBox = document.getElementById("game-over");
-
-
-
-
-
-
-    }
-
-
-
-    function getRandomAnswer(){
-        answer = wordList[Math.floor(Math.random()*wordList.length)];  //JS
-        // String answer = wordList[(int)(Math.random()*wordList.length)]  //Java
-    }
-
-    getRandomAnswer()
-
     submitButton.addEventListener('click', function(e){
-        let guess = textbox.value;
+        let guess = textBox.value;
         if (guess.length !== 5){
-            return //don't accept words that aren't 5 letters long
+            return //don't accept guesses that aren't 5 letters long
         }
-
+        if (!(guess >= "a" && guess <= "z") &&
+            !(guess >= "A" && guess <= "Z")) {
+            return false;
+        }
         //render guess to the board
         writeGuess(guess)
 
         currentGuessNumber++
-
         //check for win
         if (guess.toUpperCase() === answer.toUpperCase()){
-            gameOverMessage.textContent = 'You Won yippie!!!';
-            submitButton.remove();
-            textbox.remove();
-            return
+            gameOverMessage.textContent = 'You won!';
+            submitButton.style.display = "none";
+            textBox.style.display = "none";
+            return;
         }
-
         //check for loss
         if (currentGuessNumber >= board.children.length) {
             gameOverMessage.textContent = `You lost :( The word was ${answer}.`;
-            submitButton.remove();
-            textbox.remove();
-
+            submitButton.style.display = "none";
+            textBox.style.display = "none";
+            return
         }
-
-    });
-
+        textBox.value = ""
+    })
     function writeGuess(guess){
-        //build our match array se we easily see what matches
-        let matchArray = buildingMatchArray(guess) //todo create function that turns words into arrays
-
-        //identify the current TR tag
+        //build our match array so we easily see what matches
+        let matchArray = buildMatchArray(guess)
+        //identify the current tr tag
         let currentGuessRow = board.children[currentGuessNumber];
         //identify the columns for each letter in that row
         let columns = currentGuessRow.children
@@ -146,25 +115,24 @@
             let column = columns[i];
             column.textContent = guess[i].toUpperCase();
 
-            if (matchArray[i] === 2){ //perfect match
+            if (matchArray[i] === 2){
                 column.classList.add('correct');
-            } else if (matchArray[i] === 1){ //in word, wrong spot
+            } else if (matchArray[i] === 1){
                 column.classList.add('in-word');
             } else {
-                column.classList.add('incorrect'); //no match
+                column.classList.add('incorrect');
             }
         }
     }
-
-
-    function buildingMatchArray(guess){
+    function buildMatchArray(guess){
         guess = guess.toUpperCase();
         let answerAsArray = [];
-        let matchArray = [0, 0, 0, 0, 0,]; //assume no match to start
+        let matchArray = [0, 0, 0, 0, 0];
         for (let i = 0; i < answer.length; i++){
             let letter = answer[i].toUpperCase();
             answerAsArray.push(letter);
         }
+
         //find exact matches
         for (let i = 0; i < guess.length; i++){
             let letter = guess[i];
@@ -173,17 +141,14 @@
                 matchArray[i] = 2; //indicate we found a match
             }
         }
-
         //find in-word matches and misses
         for (let i = 0; i < guess.length; i++){
-            let letter = guess[i];
+            let letter = guess [i];
             let index = answerAsArray.indexOf(letter);
 
-            //if letter not in remaining letters, move on to next letter
             if (index === -1){
                 continue
             }
-
             //remove letter to prevent matching in other positions
             answerAsArray[index] = null;
             //mark it yellow as it is in the word but not in the correct spot
@@ -191,6 +156,25 @@
         }
         return matchArray
     }
+
+    function resetTable() {
+        board.innerHTML = "<tr><td></td><td></td><td></td><td></td><td></td></tr>" +
+            "<tr><td></td><td></td><td></td><td></td><td></td></tr>" +
+            "<tr><td></td><td></td><td></td><td></td><td></td></tr>" +
+            "<tr><td></td><td></td><td></td><td></td><td></td></tr>" +
+            "<tr><td></td><td></td><td></td><td></td><td></td></tr>" +
+            "<tr><td></td><td></td><td></td><td></td><td></td></tr>"
+    }
+
+    restartButton.addEventListener('click', function(){
+
+        gameOverMessage.textContent = ''
+        textBox.value = ""
+        resetTable()
+        textBox.removeAttribute("style")
+        submitButton.removeAttribute("style")
+        currentGuessNumber = 0;
+        answer = wordList[Math.floor(Math.random() * wordList.length)];
+    })
 </script>
-</body>
 </html>
